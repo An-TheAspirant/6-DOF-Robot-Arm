@@ -1,0 +1,12 @@
+{
+  "Gay": {
+    "base": 90,
+    "shoulder": 90,
+    "elbow": 90
+  },
+  "11": {
+    "base": 70,
+    "shoulder": 132,
+    "elbow": 44
+  }
+}
