@@ -1,6 +1,4 @@
 import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
 
 class RobotArm6DOF:
     def __init__(self, DH_parameters):
@@ -47,13 +45,17 @@ class RobotArm6DOF:
         ca = np.cos(alpha)
         sa = np.sin(alpha)
         
-        return np.array([
+        homo_trans_matrix = np.array([
             [ct, -st*ca,  st*sa, a*ct],
             [st,  ct*ca, -ct*sa, a*st],
             [0,   sa,     ca,    d   ],
             [0,   0,      0,     1   ]
         ])
         
+        rot_matrix = homo_trans_matrix[:3, :3]  # Extract rotation matrix from the transformation matrix
+        displacement_matrix = homo_trans_matrix[:3, 3]  # Extract displacement matrix from the transformation matrix
+        
+        return homo_trans_matrix, rot_matrix, displacement_matrix
         
     def forward_kinematics(self, joint_angles=None):
         ''' Joint angles in degrees/radians & input as a list or an array '''
@@ -139,11 +141,6 @@ class RobotArm6DOF:
         # R6_3 = np.linalg.inv(R3_6)  # Inverse of the rotation matrix from end-effector to wrist
         print('R3_6 = ', R3_6)
         
-        # Theta5 = np.arctan2(np.sqrt(R3_6[0][2]**2 + R3_6[1][2]**2), R3_6[2][2])  # Wrist pitch
-        # Theta4 = np.arctan2(R3_6[1][2], R3_6[0][2])  # Wrist roll
-        # Theta6 = np.arctan2(R3_6[1][2], R3_6[0][2])  # Wrist yaw
-
-        
         Theta5 = np.arccos(R3_6[2][2])  # Wrist pitch, assuming R3_6[2][2] is cos(Theta5)
         print('Theta5 = ', Theta5, 'radians')
         
@@ -183,51 +180,5 @@ if __name__ == "__main__":
     # RobotArm6DOF.forward_kinematics(joint_angles)
     print("Test run complete")
     
-def six_DOF_forward_kinematics(euler_angles):
-    """
-    Structure:
-        - take euler angles as input
-        - convert to rotation matrix
-        - calculate end-effector position and orientation
-    
-    Placeholder for a function that would calculate the forward kinematics
-    for a 6-DOF manipulator. This function should return the end-effector
-    position and orientation based on joint angles and link lengths.
-    
-    Returns:
-        End-effector position (x, y, z) and orientation (roll, pitch, yaw).
-    """
-    
-    
-    # Placeholder values for end-effector position and orientation
-    # In a real implementation, this would involve calculating the transformation    
-    # matrices for each joint and applying them to the base frame to obtain the end-effector position and orientation.
-    # This is a placeholder implementation.
-    # Actual implementation would depend on the specific manipulator configuration.
-    return (0, 0, 0), (0, 0, 0)
-
-def six_DOF_inverse_kinematics(end_effector_position, end_effector_orientation):
-    """
-    Structure:
-        - take end-effector position and orientation as input
-        - convert to rotation matrix
-        - calculate joint angles
-        
-    Placeholder for a function that would calculate the inverse kinematics
-    for a 6-DOF manipulator. This function should return the joint angles
-    based on the desired end-effector position and orientation.
-    
-    Args:
-        end_effector_position: Tuple (x, y, z) representing the end-effector position.
-        end_effector_orientation: Tuple (roll, pitch, yaw) representing the end-effector orientation.
-    
-    Returns:
-        Joint angles (theta1, theta2, theta3, theta4, theta5, theta6) in radians.
-    """
-    
-    # Placeholder values for joint angles
-    # In a real implementation, this would involve solving the kinematic equations
-    # to find the joint angles that achieve the desired end-effector position and orientation.
-    return (0, 0, 0, 0, 0, 0)
 
 

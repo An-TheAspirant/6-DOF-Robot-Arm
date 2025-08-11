@@ -1,0 +1,8 @@
+angles: [10, 20, 30]
+position:
+  - 1
+  - 2
+  - 3
+arm1:
+  position: [10, 20]
+  joint_angles: [90, 60, 30]
